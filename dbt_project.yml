@@ -1,0 +1,31 @@
+name: 'scd2_framework'
+version: '1.0.0'
+config-version: 2
+profile: 'default'          # ignored by dbt Cloud
+
+model-paths: ["models"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+clean-targets: ["target", "dbt_packages"]
+
+vars:
+  fw_high_date: '9999-12-31'   # end date of the current version
+
+# FRAMEWORK CONFIG: set once per folder, inherited by every model inside it
+models:
+  scd2_framework:
+    staging:                     # business rules per table
+      +materialized: view
+      +schema: staging
+    dimensions:                  # SCD Type 2 tables
+      +materialized: incremental
+      +incremental_strategy: merge
+      +unique_key: scd_id
+      +merge_update_columns: ['valid_to', 'is_current']
+      +full_refresh: false       # history can never be wiped
+      +schema: gold
+      +tags: ['scd2']
+    reporting:                   # views for Power BI
+      +materialized: view
+      +schema: gold
+      +tags: ['reporting']
