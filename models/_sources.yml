@@ -1,0 +1,22 @@
+version: 2
+sources:
+- name: curated
+description: Curated silver layer (input to dbt)
+database: "{{ env
+_
+var('DBT
+_
+SOURCE
+_
+DB'
+,
+'SANDBOX
+_
+DB') }}"
+schema: CURATED
+tables:
+- name: crm
+_policyholder
+- name: web
+_policyholder
+- name: policy
